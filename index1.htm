@@ -29,6 +29,22 @@
             flex-direction: column;
         }
 
+        /* 눈송이 스타일 추가 */
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            pointer-events: none;
+            animation: fall linear infinite;
+            z-index: 9999;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
+
         .app-container {
             display: grid;
             grid-template-columns: 80px 320px 1fr;
@@ -38,7 +54,6 @@
             min-height: 0;
         }
 
-        /* 1. 왼쪽 세로 영문 웰컴 문구 */
         .welcome-sidebar {
             display: flex;
             align-items: center;
@@ -50,19 +65,18 @@
         }
 
         .welcome-text {
-            writing-mode: vertical-rl; /* 세로 쓰기 */
+            writing-mode: vertical-rl;
             text-orientation: mixed;
-            font-family: 'Montserrat', sans-serif; /* 영문에 더 멋진 폰트 적용 */
+            font-family: 'Montserrat', sans-serif;
             font-size: 1.5rem;
             font-weight: 900;
             letter-spacing: 4px;
             color: var(--point-blue);
             text-shadow: var(--neon-shadow);
             opacity: 0.8;
-            text-transform: uppercase; /* 대문자로 강조 */
+            text-transform: uppercase;
         }
 
-        /* 2. 사이드 패널 */
         .glass-box {
             background: var(--card-bg);
             padding: 25px;
@@ -94,7 +108,6 @@
         .city-info .time { font-size: 1.4rem; font-weight: 700; color: #fff; }
         .city-weather .temp { font-size: 1.4rem; color: var(--point-blue); font-weight: 700; }
 
-        /* 3. 메인 영역 */
         .main-content {
             display: flex;
             flex-direction: column;
@@ -140,7 +153,6 @@
             object-fit: cover;
         }
 
-        /* 하단 영어 섹션 */
         .english-section {
             background: var(--card-bg);
             padding: 25px;
@@ -207,22 +219,22 @@
         <div class="middle-row">
             <div class="info-frame" style="display: flex; flex-direction: column; gap: 20px;">
                 <div class="info-card" style="flex:1;">
-                    <div class="panel-header" style="color:var(--accent-gold);">📜 3월 18일, 오늘의 역사</div>
-                    <div id="history-content" class="info-content">1965년 3월 18일, 소련의 레오노프 인류 최초 우주 유영 성공.</div>
+                    <div class="panel-header" style="color:var(--accent-gold);">📜 3월 19일, 오늘의 역사</div>
+                    <div id="history-content" class="info-content">1932년 3월 19일, 이봉창 의사가 일본 국왕 폭살 시도 혐의로 첫 공판을 받았습니다.</div>
                 </div>
                 <div class="info-card" style="flex:1;">
                     <div class="panel-header">💡 오늘의 상식</div>
-                    <div id="trivia-content" class="info-content">꿀은 영구적으로 보존 가능한 유일한 식품입니다.</div>
+                    <div id="trivia-content" class="info-content">상어는 부레가 없어서 가라앉지 않기 위해 평생 끊임없이 헤엄쳐야 합니다.</div>
                 </div>
             </div>
             <div class="image-frame">
                 <img src="photo.jpg" class="main-photo" alt="My Photo">
             </div>
         </div>
-
+    
         <div class="english-section">
-            <div id="eng-text">Dream big and dare to fail.</div>
-            <div id="kor-text">크게 꿈꾸고 용기 있게 도전하라.</div>
+            <div id="eng-text">The only way to do great work is to love what you do.</div>
+            <div id="kor-text">위대한 일을 하는 유일한 방법은 당신이 하는 일을 사랑하는 것입니다.</div>
             <button class="btn" onclick="speakEnglish()">🔊 LISTEN VOICE</button>
         </div>
     </div>
@@ -235,6 +247,24 @@
 <audio id="bgm" src="bgm.mp3" loop></audio>
 
 <script>
+    /* 눈 내리는 효과 자바스크립트 */
+    function createSnow() {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.style.left = Math.random() * 100 + 'vw';
+        snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+        snowflake.style.opacity = Math.random();
+        snowflake.style.width = snowflake.style.height = Math.random() * 5 + 2 + 'px';
+        
+        document.body.appendChild(snowflake);
+        
+        setTimeout(() => {
+            snowflake.remove();
+        }, 5000);
+    }
+    setInterval(createSnow, 100);
+
+    /* 기존 기능 유지 */
     function updateClocks() {
         const opt = { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
         document.getElementById('time-seoul').innerText = new Intl.DateTimeFormat('ko-KR', { ...opt, timeZone: 'Asia/Seoul' }).format(new Date());

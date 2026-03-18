@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>종건의 스마트 대시보드</title>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Montserrat:wght@700;900&family=Noto+Sans+KR:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #020617;
+            --card-bg: rgba(30, 41, 59, 0.6);
+            --point-blue: #38bdf8;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --accent-gold: #fbbf24;
+            --neon-shadow: 0 0 10px rgba(56, 189, 248, 0.5), 0 0 20px rgba(56, 189, 248, 0.3);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%);
+            color: var(--text-main);
+            font-family: 'Noto Sans KR', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-container {
+            display: grid;
+            grid-template-columns: 80px 320px 1fr;
+            flex: 1;
+            padding: 20px;
+            gap: 20px;
+            min-height: 0;
+        }
+
+        /* 1. 왼쪽 세로 영문 웰컴 문구 */
+        .welcome-sidebar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 20px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            padding: 20px 0;
+        }
+
+        .welcome-text {
+            writing-mode: vertical-rl; /* 세로 쓰기 */
+            text-orientation: mixed;
+            font-family: 'Montserrat', sans-serif; /* 영문에 더 멋진 폰트 적용 */
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+            color: var(--point-blue);
+            text-shadow: var(--neon-shadow);
+            opacity: 0.8;
+            text-transform: uppercase; /* 대문자로 강조 */
+        }
+
+        /* 2. 사이드 패널 */
+        .glass-box {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .panel-header {
+            font-size: 0.85rem;
+            color: var(--point-blue);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .city-card {
+            background: rgba(15, 23, 42, 0.4);
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .city-info .time { font-size: 1.4rem; font-weight: 700; color: #fff; }
+        .city-weather .temp { font-size: 1.4rem; color: var(--point-blue); font-weight: 700; }
+
+        /* 3. 메인 영역 */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: 100%;
+            min-height: 0;
+        }
+
+        .middle-row {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            min-height: 0;
+        }
+
+        .info-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-content {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: var(--text-main);
+            margin-top: 15px;
+        }
+
+        .image-frame {
+            background: #000;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .main-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 하단 영어 섹션 */
+        .english-section {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 20px;
+            border-left: 6px solid var(--point-blue);
+        }
+
+        #eng-text { font-size: 1.8rem; font-weight: 800; color: var(--accent-gold); margin-bottom: 5px; }
+        #kor-text { font-size: 1.2rem; color: var(--text-sub); margin-bottom: 15px; }
+
+        .btn {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid var(--point-blue);
+            color: var(--point-blue);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover { background: var(--point-blue); color: #000; }
+
+        .ticker-bar {
+            height: 40px;
+            background: #020617;
+            display: flex;
+            align-items: center;
+            padding: 0 25px;
+            font-size: 0.8rem;
+            color: var(--text-sub);
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="welcome-sidebar">
+        <div class="welcome-text">WELCOME TO JONGKEON'S APP PAGE</div>
+    </div>
+
+    <div class="side-panel">
+        <div class="glass-box">
+            <div class="panel-header">● SYSTEM TIME</div>
+            <div class="city-card">
+                <div class="city-info"><span style="font-size:0.75rem; color:var(--text-sub);">SEOUL</span><br><span id="time-seoul" class="time">00:00:00</span></div>
+                <div class="city-weather"><span id="temp-seoul" class="temp">--°C</span></div>
+            </div>
+            <div class="city-card">
+                <div class="city-info"><span style="font-size:0.75rem; color:var(--text-sub);">NEW YORK</span><br><span id="time-ny" class="time">00:00:00</span></div>
+                <div class="city-weather"><span id="temp-ny" class="temp">--°C</span></div>
+            </div>
+
+            <div style="margin-top: auto;">
+                <div class="panel-header">● BGM CONTROL</div>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button class="btn" style="flex:1" onclick="document.getElementById('bgm').play()">PLAY</button>
+                    <button class="btn" style="flex:1; border-color:#475569; color:#94a3b8;" onclick="document.getElementById('bgm').pause()">STOP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="middle-row">
+            <div class="info-frame" style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="info-card" style="flex:1;">
+                    <div class="panel-header" style="color:var(--accent-gold);">📜 3월 18일, 오늘의 역사</div>
+                    <div id="history-content" class="info-content">1965년 3월 18일, 소련의 레오노프 인류 최초 우주 유영 성공.</div>
+                </div>
+                <div class="info-card" style="flex:1;">
+                    <div class="panel-header">💡 오늘의 상식</div>
+                    <div id="trivia-content" class="info-content">꿀은 영구적으로 보존 가능한 유일한 식품입니다.</div>
+                </div>
+            </div>
+            <div class="image-frame">
+                <img src="photo.jpg" class="main-photo" alt="My Photo">
+            </div>
+        </div>
+
+        <div class="english-section">
+            <div id="eng-text">Dream big and dare to fail.</div>
+            <div id="kor-text">크게 꿈꾸고 용기 있게 도전하라.</div>
+            <button class="btn" onclick="speakEnglish()">🔊 LISTEN VOICE</button>
+        </div>
+    </div>
+</div>
+
+<div class="ticker-bar">
+    <div id="ticker-content">BTC/USDT CONNECTING...</div>
+</div>
+
+<audio id="bgm" src="bgm.mp3" loop></audio>
+
+<script>
+    function updateClocks() {
+        const opt = { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        document.getElementById('time-seoul').innerText = new Intl.DateTimeFormat('ko-KR', { ...opt, timeZone: 'Asia/Seoul' }).format(new Date());
+        document.getElementById('time-ny').innerText = new Intl.DateTimeFormat('en-US', { ...opt, timeZone: 'America/New_York' }).format(new Date());
+    }
+    setInterval(updateClocks, 1000);
+
+    async function updateWeather() {
+        const locations = [{ id: 'seoul', lat: 37.56, lon: 126.97 }, { id: 'ny', lat: 40.71, lon: -74.00 }];
+        for (const loc of locations) {
+            try {
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&current_weather=true`);
+                const data = await res.json();
+                document.getElementById(`temp-${loc.id}`).innerText = Math.round(data.current_weather.temperature) + "°C";
+            } catch (e) {}
+        }
+    }
+    updateWeather();
+
+    function speakEnglish() {
+        const msg = new SpeechSynthesisUtterance(document.getElementById('eng-text').innerText);
+        msg.lang = 'en-US';
+        window.speechSynthesis.speak(msg);
+    }
+
+    const ticker = document.getElementById('ticker-content');
+    const ws = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@ticker');
+    ws.onmessage = (e) => {
+        const d = JSON.parse(e.data);
+        ticker.innerHTML = `BTC/USDT: $${parseFloat(d.c).toLocaleString()} | 24H: ${parseFloat(d.P).toFixed(2)}% | MARKET ONLINE`;
+    };
+</script>
+</body>
+</html>
